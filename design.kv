@@ -1,0 +1,121 @@
+# name of this is "login_screen"
+<LoginScreen>:
+    GridLayout:
+        cols: 1
+        GridLayout:
+            cols: 1
+            padding: 15, 15
+            spacing: 20, 20
+            Label:
+                text: "User Login"
+                font_size: '20sp'
+            TextInput:
+                id: username
+                hint_text: "Username"
+            TextInput:
+                id: password
+                hint_text: "Password"
+                password: True
+                #The password attribute that makes it turn to stars
+            RelativeLayout:
+                Button:
+                    text: "Login"
+                    on_press: root.login_success(root.ids.username.text, root.ids.password.text)
+                    size_hint: 0.3, 0.55
+                    pos_hint: {'center_x':0.5, 'center_y': 0.6}                                 
+            Label:
+                id: login_wrong
+                text: ""
+                #This text box has been filled using line 21 from main.py
+        GridLayout:
+            cols: 2
+            padding: 15, 15
+            spacing: 20, 20
+            size_hint: 0.2, 0.2
+            #This gives this particular gridlayout 20% (0.2) of the total grid space
+            Button:
+                text: "Forgot Password?"
+                background_color: 1, 1, 1, 0
+                opacity: 1 if self.state == 'normal' else 0.5
+                color: 0.1, 0.7, 1, 1 #color is in RGB individual percentages #more of blue #Transparency of 1, not transparent
+            Button:
+                text: "Sign Up"
+                background_color: 1, 1, 1, 0
+                opacity: 1 if self.state == 'normal' else 0.5
+                color: 0.1, 0.7, 1, 1 #color is in RGB individual percentages #more of blue #Transparency of 1, not transparent
+                on_press: root.sign_up() #root is LoginScreen here
+
+#name of this is "sign_up_screen"
+#This is the root
+<SignUpScreen>:
+    GridLayout:
+        cols: 1
+        padding: 15, 15
+        spacing: 20, 20
+        Label:
+            text: "Sign Up for a space journey"
+        TextInput:
+            id: username
+            hint_text: "Username"
+        TextInput:
+            id: password
+            hint_text: "Password"
+            password: True
+        Button:
+            text: "Submit"
+            on_press: root.add_user(root.ids.username.text, root.ids.password.text)
+            
+
+<SignUpScreenSuccess>:
+    GridLayout:
+        cols: 1
+        Label:
+            text: "Congratulations!!, You have successfully signed up"
+        Button:
+            text: "Login Page"
+            on_press: root.login_page()
+
+<LoginScreenSuccess>:
+    GridLayout:
+        cols: 1
+        padding: 30, 30
+        spacing: 30, 30
+        #RelativeLayout makes thr pos_hint work, because nothing is by the sides of the button
+        RelativeLayout:
+            ImageButton:
+                on_press: root.log_out()
+                size_hint: 0.35, 0.35
+                pos_hint: {'center_x':0.93, 'center_y': 0.8}  
+                source: 'logout_hover.png' if self.hovered else 'logout_nothover.png'
+                #'self.hovered' is from the hoverable.py file                                                                   
+        Label:
+            text: "How do you feel today?"
+        TextInput:
+            id: original_text_input
+            hint_text: "Things to try: happy, sad, unloved....."
+        Button:
+            text: "Enlighten me"
+            on_press: root.get_quotes_function(root.ids.original_text_input.text)
+        ScrollView:
+            Label:
+                id: original_text_label_id
+                text: ""
+                text_size: self.width, None
+                #text_size: self.width, self.height
+                # self here is the Label object, we want the text_size to fit into the Lablel's object height and width
+                size_hint_y: None
+                #This makes the label ignore the default label size height of 20% (which is 100px)
+                height: self.texture_size[1] #dynamic           
+                # height: 200
+                #This is the Label height been changed from 100 to 200px                                                   
+
+#This is just to specify that the LoginScreen is a child of <RootWidget>
+<RootWidget>:
+    LoginScreen:
+        name: "login_screen" #would be needed later on in the python logic
+    SignUpScreen:
+        name: "sign_up_screen"
+    SignUpScreenSuccess:
+        name: "sign_up_screen_success"
+    LoginScreenSuccess:
+        name: "login_screen_success"
